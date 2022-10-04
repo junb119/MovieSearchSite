@@ -1,5 +1,6 @@
 // 영화 검색 관련 데이터 취급
 import axios from 'axios' // npm i axios
+import _uniqBy from 'lodash/uniqBy'
 
 export default {
   // namespaced : store에서 module화해서 사용한다는 것을 명시화
@@ -36,7 +37,7 @@ export default {
       const res = await axios.get(`https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${title}&type=${type}&y=${year}&page=1`) // OMDb api 사용
       const {Search, totalResults} = res.data
       /*context.*/commit('updateState', {
-        movies:Search
+        movies: _uniqBy(Search, 'imdbID')
       })
       console.log(totalResults) // 310
       console.log(typeof totalResults) // string
@@ -51,7 +52,9 @@ export default {
           const res = await axios.get(`https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${title}&type=${type}&y=${year}&page=${page}`) // OMDb api 사용
           const {Search} = res.data
           commit('updateState', {
-            movies : [...state.movies, ...Search]
+            movies : [
+              ...state.movies,
+              ..._uniqBy(Search,'imdbID')]
           })
         }
       }
