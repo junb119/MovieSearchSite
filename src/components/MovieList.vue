@@ -4,7 +4,7 @@
 <!-- 형제 컴포넌트 간, 혹은 멀리 떨어진 컴포넌트 간 데이터 전달을 위해 vuex(상태관리패턴+라이브러리 사용)-->
 <!-- npm i vuex  -->
 <!-- vex를 사용해 형제 컴포넌트인 MovieList와 Search간 데이터 전달.  -->
-  <div class="contatiner">
+  <div class="container">
     <div class="inner">
       <MovieItem 
         v-for="movie in movies"
