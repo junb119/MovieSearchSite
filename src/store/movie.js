@@ -1,4 +1,5 @@
 // 영화 검색 관련 데이터 취급
+import axios from 'axios' // npm i axios
 
 export default {
   // namespaced : store에서 module화해서 사용한다는 것을 명시화
@@ -10,16 +11,19 @@ export default {
   }),
 
   // getters : 계산된 데이터 생성 (=computed)
-  getters: {
-    movieIds(state) {
-      return state.movies.map(m => m.imdbID)
-    }
-  },
+  getters: {},
 
   // mutations, actions : methods와 유사
   // 변이
   // mutations를 통해서만 데이터 수정 가능
   mutations : {
+    updateState(state, payload) {
+      
+      Object.keys(payload).forEach(key => {
+        state[key] = payload[key]
+      }) // ['movies','message','loading']
+
+    },
     resetMovies(state){
       state.movies =[]
     }
@@ -27,8 +31,15 @@ export default {
 
   // 비동기
   actions: {
-    searchMovies(){
+    async searchMovies(/*context->*/{commit}, payload){
+      const {title, type, number, year} = payload
+      const OMDB_API_KEY = '7035c60c'
+      const res = await axios.get(`https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${title}&type=${type}&y=${year}&page=1`) // OMDb api 사용
+      const {Search, totalResults} = res.data
+      /*context.*/commit('updateState', {
+        movies:Search,
 
+      })
     }
   }
 }
