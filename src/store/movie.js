@@ -32,32 +32,63 @@ export default {
   // 비동기
   actions: {
     async searchMovies(/*context->*/{state, commit}, payload){
-      const {title, type, number, year} = payload
-      const OMDB_API_KEY = '7035c60c'
-      const res = await axios.get(`https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${title}&type=${type}&y=${year}&page=1`) // OMDb api 사용
-      const {Search, totalResults} = res.data
-      /*context.*/commit('updateState', {
-        movies: _uniqBy(Search, 'imdbID')
-      })
-      console.log(totalResults) // 310
-      console.log(typeof totalResults) // string
-
-      const total = parseInt(totalResults, 10)
-      const pageLength = Math.ceil(total / 10)
-
-      // 추가 요청
-      if (pageLength > 1) {
-        for (let page =2; page <= pageLength; page++) {
-          if (page > (number / 10 ) ) break
-          const res = await axios.get(`https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${title}&type=${type}&y=${year}&page=${page}`) // OMDb api 사용
-          const {Search} = res.data
-          commit('updateState', {
-            movies : [
-              ...state.movies,
-              ..._uniqBy(Search,'imdbID')]
-          })
+      try{
+        const res = await _fetchMovie({
+          ...payload,
+          page: 1
+        })
+        const {Search, totalResults} = res.data
+        /*context.*/commit('updateState', {
+          movies: _uniqBy(Search, 'imdbID')
+        })
+        console.log(totalResults) // 310
+        console.log(typeof totalResults) // string
+  
+        const total = parseInt(totalResults, 10)
+        const pageLength = Math.ceil(total / 10)
+  
+        // 추가 요청
+        if (pageLength > 1) {
+          for (let page =2; page <= pageLength; page++) {
+            if (page > (payload.number / 10 ) ) break
+            const res = await _fetchMovie({
+              ...payload,
+              page
+            })
+            const {Search} = res.data
+            commit('updateState', {
+              movies : [
+                ...state.movies,
+                ..._uniqBy(Search,'imdbID')]
+            })
+          }
         }
+      } catch(message){
+        commit('updateState',{
+          movies: [],
+          message
+        })
       }
     }
   }
+}
+
+function _fetchMovie(payload) { //movie.js 내에서만 사용
+  const {title, type, year, page } = payload
+  const OMDB_API_KEY = '7035c60c'
+  const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${title}&type=${type}&y=${year}&page=${page}`
+  // const url = `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}` // error확인위한 주석
+
+  return new Promise((resolve, reject) => {
+    axios.get(url)
+    .then(res => {
+      if (res.data.Error) {
+        reject(res.data.Error)
+      }
+      resolve(res)
+    })
+    .catch(err => {
+      reject(err.message)
+    })
+  })
 }

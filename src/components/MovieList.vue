@@ -6,6 +6,9 @@
 <!-- vex를 사용해 형제 컴포넌트인 MovieList와 Search간 데이터 전달.  -->
   <div class="container">
     <div class="inner">
+      <div class="message">
+        {{message}}
+      </div>
       <MovieItem 
         v-for="movie in movies"
         :key="movie.imdbID"
@@ -24,6 +27,9 @@ export default {
   computed: {
     movies() {
       return this.$store.state.movie.movies
+    },
+    message() {
+      return this.$store.state.movie.message
     }
   }
 }
