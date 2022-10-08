@@ -38,6 +38,16 @@ export default {
   background-size: cover;
   overflow:hidden;
   position: relative;
+  &:hover::after{
+    content:'';
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left:0;
+    right:0;
+    border: 6px solid $primary;
+
+  }
   .info{
     background-color: rgba($black, .3);
     width:100%;
@@ -47,6 +57,16 @@ export default {
     position: absolute;
     left:0;
     bottom:0;
+    backdrop-filter: blur(10px); // 해당 영역을 블러처리
+    .year {
+      color: $primary;
+    }
+    .title {
+      color : $white;
+      white-space: nowrap; // 넘치는 텍스트를 감싸지 않음
+      overflow: hidden;
+      text-overflow: ellipsis; // 넘치는 텍스트를 ...으로 표시
+    }
   }
 }
 </style>
