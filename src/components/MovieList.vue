@@ -5,16 +5,21 @@
 <!-- npm i vuex  -->
 <!-- vex를 사용해 형제 컴포넌트인 MovieList와 Search간 데이터 전달.  -->
   <div class="container">
-    <div class="inner">
-      <div class="message">
-        {{message}}
-      </div>
-      <div class="movies">
-        <MovieItem 
-          v-for="movie in movies"
-          :key="movie.imdbID"
-          :movie="movie" />
-      </div>
+    <div :class="{'no-result': !movies.length}"
+          class="inner">
+          <div v-if="loading"
+          class="spinner-border text-primary"></div>
+          <div v-if="message" class="message"> 
+          <!-- message가 있다면 v-else부분 출력 x -->
+            {{message}}
+          </div>
+          <div v-else
+              class="movies">
+              <MovieItem 
+                v-for="movie in movies"
+                :key="movie.imdbID"
+                :movie="movie" />
+          </div>
     </div>  
   </div>
 </template>
@@ -32,6 +37,9 @@ export default {
     },
     message() {
       return this.$store.state.movie.message
+    },
+    loading() {
+      return this.$store.state.movie.loading
     }
   }
 }
@@ -46,6 +54,14 @@ export default {
     background-color: $gray-200;
     padding: 10px 0;
     border-radius: 4px;
+    text-align: center;
+    &.no-result{
+      padding: 70px 0;
+    }
+    .message {
+      color: $gray-400;
+      font-size: 20px;
+    }
   }
   .movies {
     display: flex;

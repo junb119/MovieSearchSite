@@ -8,7 +8,9 @@ export default {
 
   // state : 취급해야하는 각각의 데이터
   state: () => ({
-    movies : []
+    movies : [],
+    message:'Search for the movie title',
+    loading: false
   }),
 
   // getters : 계산된 데이터 생성 (=computed)
@@ -32,6 +34,11 @@ export default {
   // 비동기
   actions: {
     async searchMovies(/*context->*/{state, commit}, payload){
+      if (state.loading) return
+      commit('updateState', {
+        message: '',
+        loading: true
+      })
       try{
         const res = await _fetchMovie({
           ...payload,
@@ -67,6 +74,10 @@ export default {
         commit('updateState',{
           movies: [],
           message
+        })
+      } finally{
+        commit('updateState', {
+          loading:false
         })
       }
     }
