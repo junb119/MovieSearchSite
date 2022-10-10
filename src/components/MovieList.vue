@@ -7,8 +7,7 @@
   <div class="container">
     <div :class="{'no-result': !movies.length}"
           class="inner">
-          <div v-if="loading"
-          class="spinner-border text-primary"></div>
+          <Loader v-if="loading"/>
           <div v-if="message" class="message"> 
           <!-- message가 있다면 v-else부분 출력 x -->
             {{message}}
@@ -26,11 +25,13 @@
 
 <script>
 import MovieItem from '~/components/MovieItem'
+import Loader from '~/components/Loader'
 
 export default {
   components : {
-    MovieItem
-  },
+    MovieItem,
+    Loader
+},
   computed: {
     movies() {
       return this.$store.state.movie.movies
