@@ -6,10 +6,11 @@
       :key="nav.name"
       class="nav-item">
         <RouterLink 
-        :to="nav.href"
-        active-class="active"
-        class='nav-link'>
-        <!-- active-class : 디폴트인 router-link-active를 active로 수정 -->
+          :to="nav.href"
+          active-class="active"
+          :class="{ active: isMatch(nav.path)}"
+          class='nav-link'>
+          <!-- active-class : 디폴트인 router-link-active를 active로 수정 -->
           {{nav.name}}
         </RouterLink>
       </div>
@@ -32,13 +33,21 @@ export default {
         },
         {
           name:'Movie',
-          href:'/movie/tt4520988'
+          href:'/movie/tt4520988',
+          path: /^\/movie/ // '/movie'
         },
         {
           name:'About',
           href:'/about'
         }
       ]
+    }
+  },
+  methods : {
+    isMatch(path) {
+      if (!path) return false
+      console.log(this.$route)
+      return path.test(this.$route.fullPath)
     }
   }
 }
