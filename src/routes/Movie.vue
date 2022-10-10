@@ -76,6 +76,7 @@
 </template>
 
 <script>
+import { mapState, mapActions} from 'vuex'
 import Loader from '~/components/Loader'
 export default {
   components :{
@@ -87,20 +88,23 @@ export default {
     }
   },
   computed: {
-    theMovie() {
-      return this.$store.state.movie.theMovie
-    },
-    loading() {
-      return this.$store.state.movie.loading
-    }
+    ...mapState('movie', [
+      'theMovie',
+      'loading'
+    ])
   },
   created() {
     console.log(this.$route)
-    this.$store.dispatch('movie/searchMovieWithId', {
+      this.$store.dispatch('movie/searchMovieWithId', {
+        // (mapActions를 사용한 방법 = this.searechMovieWithId({
+
       id:this.$route.params.id
     })
   },
   methods: {
+    // ...mapActions('movie',[
+    //   'searchMovieWithId'
+    // ]),
     requestDiffSizeImage(url, size=700) {
       if (!url || url === 'N/A'){
         this.imageLoading = false
