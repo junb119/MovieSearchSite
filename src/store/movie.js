@@ -1,7 +1,7 @@
 // 영화 검색 관련 데이터 취급
 import axios from 'axios' // npm i axios
 import _uniqBy from 'lodash/uniqBy'
-
+const _defaultMessage = 'Search for the movie title'
 export default {
   // namespaced : store에서 module화해서 사용한다는 것을 명시화
   namespaced: true,
@@ -9,7 +9,7 @@ export default {
   // state : 취급해야하는 각각의 데이터
   state: () => ({
     movies : [],
-    message:'Search for the movie title',
+    message: _defaultMessage,
     loading: false,
     theMovie: {}
   }),
@@ -29,6 +29,8 @@ export default {
     },
     resetMovies(state){
       state.movies =[]
+      state.message = _defaultMessage
+      state.loading = false
     }
   },
 

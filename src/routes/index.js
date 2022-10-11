@@ -6,7 +6,9 @@ import NotFound from './NotFound'
 export default createRouter({
   // Hash 모드 사용
   history: createWebHashHistory() ,
-
+  scrollBehavior(){
+    return {top: 0} 
+  }, // 페이지 이동시 항상 최상단
   // 웹사이트 페이지 구분
   routes:[
     {
