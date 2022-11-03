@@ -6,7 +6,7 @@ module.exports = {
   // 일반적으로 많이 사용되는 모듈의 확장자를 지정합니다.
   moduleFileExtensions: [
     'js',
-    'vue'
+    'vue' 
   ],
 
   // `~` 같은 경로 별칭을 매핑합니다.

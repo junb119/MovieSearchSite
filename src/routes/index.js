@@ -15,7 +15,7 @@ export default createRouter({
       path :'/', //메인페이지
       component: Home //연결할 컴포넌트
     },{
-      path : '/about',
+      path : '/About',
       component: About
     },{
       path :'/Movie/:id',
